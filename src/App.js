@@ -66,7 +66,7 @@ function App () {
     const max = 1000;
     const rand = Math.ceil(min + Math.random() * (max - min));
     const [values, setValues] = useState({
-        name: '', type: '', category: '', status: '', notes: '', parent_code: parentId, code: rand
+        name: '', type: '', category: '', status: '', note: '', parent_code: parentId, code: rand
     });
     const set = name => {
         return ({ target: { value } }) => {
@@ -77,10 +77,12 @@ function App () {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            dispatch(createAccount(values))
+            console.log(values);
             setValues({
-                name: '', type: '', category: '', status: '', notes: '', parent_code: 0, code: 0
+                name: '', type: '', category: '', status: true, note: '', parent_code: 0, code: 0
             });
+            setParentID(0);
+            setIsModalOpen(false);
         } catch (e) {
             //show errors
         }
@@ -94,7 +96,7 @@ function App () {
                 dataSource={data}
             />
             <Modal title="Add Child Account" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <Form id="child-account" onSubmit={onSubmit}>
+                <Form id="child-account">
                     <Input size="large" placeholder="Account Name" name="name" onChange={set('name')} required />
                     <Input size="large" placeholder="Type" name="type" onChange={set('type')} required />
                     <Input size="large" placeholder="Category" name="category" onChange={set('category')}  required />
@@ -109,9 +111,9 @@ function App () {
                         },
                     ]} required />
                     <Input size="large" placeholder="Note" onChange={set('note')} name="note" required />
-                    <Input size="large" placeholder="Parent Code Id" name="parent_code" value={parentId} readonly="readonly" />
+                    <Input size="large" placeholder="Parent Code Id" name="parent_code" value={parentId} readOnly />
 
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit" onClick={onSubmit}>Submit</Button>
                 </Form>
             </Modal>
         </>
